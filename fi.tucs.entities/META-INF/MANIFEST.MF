@@ -1,0 +1,30 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: fi.tucs.entities
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: fi.tucs.entities; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.5.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.xtext.xbase.lib,
+ org.antlr.runtime,
+ org.eclipse.xtext.util,
+ org.eclipse.xtend.lib,
+ org.eclipse.emf.common
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: fi.tucs.entities.entities,
+ fi.tucs.entities.parser.antlr,
+ fi.tucs.entities.validation,
+ fi.tucs.entities.services,
+ fi.tucs.entities.serializer,
+ fi.tucs.entities.entities.util,
+ fi.tucs.entities.generator,
+ fi.tucs.entities,
+ fi.tucs.entities.parser.antlr.internal,
+ fi.tucs.entities.scoping,
+ fi.tucs.entities.entities.impl,
+ fi.tucs.entities.formatting2
+Import-Package: org.apache.log4j
