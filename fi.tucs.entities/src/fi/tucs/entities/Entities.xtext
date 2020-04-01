@@ -16,7 +16,7 @@ Entity:
 ;
 
 Statement:
-	PrintStatement | AssignmentStatement
+	PrintStatement | AssignmentStatement 
 ;
 
 AssignmentStatement:
