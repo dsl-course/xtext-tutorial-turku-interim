@@ -3,8 +3,6 @@
  */
 package fi.tucs.entities.validation
 
-//import fi.tucs.entities.entities.Entity
-//import org.eclipse.xtext.validation.Check
 import fi.tucs.entities.entities.EntitiesPackage
 
 import static extension java.lang.Character.*
@@ -21,18 +19,6 @@ import fi.tucs.entities.entities.Entity
  */
 class EntitiesValidator extends AbstractEntitiesValidator {
 	
-//	public static val INVALID_NAME = 'invalidName'
-//
-//	@Check
-//	def checkGreetingStartsWithCapital(Greeting greeting) {
-//		if (!Character.isUpperCase(greeting.name.charAt(0))) {
-//			warning('Name should start with a capital', 
-//					EntitiesPackage.Literals.GREETING__NAME,
-//					INVALID_NAME)
-//		}
-//	}
-
-	
 	protected static val ISSUE_CODE_PREFIX = "fi.tucs.entities.";
 	
 	public static val HIERARCHY_CYCLE 				= ISSUE_CODE_PREFIX + "HierarchyCycle";
@@ -42,8 +28,20 @@ class EntitiesValidator extends AbstractEntitiesValidator {
 	
 	
 	@Check
+	def checkEntityNameStartsWithCapital(Entity entity) {
+		if (entity.name.charAt(0).lowerCase) {
+			warning("Entity name should start with a capital",
+				EntitiesPackage.eINSTANCE.entity_Name,
+				INVALID_ENTITY_NAME, // issue code
+				entity.name // issue data
+			)
+		}
+	}
+	
+	
+	@Check
 	// checking whether inheritance hierarchy has cycles
-	def fjsdkfjsdfklsd(Entity entity) {
+	def methodNameDoesntMatter(Entity entity) {
 		if (entity.superType === null)
 			return
 			
@@ -67,36 +65,11 @@ class EntitiesValidator extends AbstractEntitiesValidator {
 		} // end while
  	}
 
-
-	@Check
-	def checkEntityNameStartsWithCapital(Entity entity) {
-		if (entity.name.charAt(0).lowerCase) {
-			warning("Entity name should start with a capital",
-				EntitiesPackage.eINSTANCE.entity_Name,
-				INVALID_ENTITY_NAME, // issue code
-				entity.name // issue data
-			)
-		}
-	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	@Inject extension ExpressionTypeComputer fasfsjflksjflks
+	@Inject extension ExpressionTypeComputer nameDoesntMatter
 	
 	@Check
-	def fjsdklfsdfkljs(AssignmentStatement x) {
+	def checkAssignmentHasCorrectTypes(AssignmentStatement x) {
 		val left = x.assignee.typeFor
 		val right = x.expr.typeFor
 		

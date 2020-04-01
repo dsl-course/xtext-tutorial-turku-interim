@@ -10,6 +10,7 @@ import fi.tucs.entities.entities.FieldType;
 import fi.tucs.entities.entities.IntConstant;
 import fi.tucs.entities.entities.StringConstant;
 import fi.tucs.entities.typing.Boolean_Type;
+import fi.tucs.entities.typing.Entity_Type;
 import fi.tucs.entities.typing.Expression_Type;
 import fi.tucs.entities.typing.Integer_Type;
 import fi.tucs.entities.typing.String_Type;
@@ -54,7 +55,7 @@ public class ExpressionTypeComputer {
   }
   
   public Expression_Type typeFor(final Field f) {
-    Object _xblockexpression = null;
+    Entity_Type _xblockexpression = null;
     {
       FieldType _type = f.getType();
       if ((_type instanceof BasicType)) {
@@ -71,13 +72,15 @@ public class ExpressionTypeComputer {
           }
         }
       }
-      Object _xifexpression = null;
+      Entity_Type _xifexpression = null;
       FieldType _type_2 = f.getType();
       if ((_type_2 instanceof EntityType)) {
-        _xifexpression = null;
+        FieldType _type_3 = f.getType();
+        String _name = ((EntityType) _type_3).getEntity().getName();
+        _xifexpression = new Entity_Type(_name);
       }
       _xblockexpression = _xifexpression;
     }
-    return ((Expression_Type)_xblockexpression);
+    return _xblockexpression;
   }
 }

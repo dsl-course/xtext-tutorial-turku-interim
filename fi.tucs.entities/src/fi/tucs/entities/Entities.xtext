@@ -28,7 +28,7 @@ PrintStatement:
 ;
 
 
-Expression:
+Expression: 
 	{IntConstant} value=INT |
 	{StringConstant} value=STRING |
 	{BoolConstant} value=('on' | 'off') |

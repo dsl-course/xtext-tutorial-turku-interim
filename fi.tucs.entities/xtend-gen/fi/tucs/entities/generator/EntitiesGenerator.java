@@ -3,6 +3,7 @@
  */
 package fi.tucs.entities.generator;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import fi.tucs.entities.entities.AssignmentStatement;
 import fi.tucs.entities.entities.BasicType;
@@ -54,7 +55,18 @@ public class EntitiesGenerator extends AbstractGenerator {
     _builder.append("public class ");
     String _name = entity.getName();
     _builder.append(_name);
-    _builder.append(" {");
+    _builder.append(" ");
+    {
+      Entity _superType = entity.getSuperType();
+      boolean _notEquals = (!Objects.equal(_superType, null));
+      if (_notEquals) {
+        _builder.append("extends ");
+        String _name_1 = entity.getSuperType().getName();
+        _builder.append(_name_1);
+        _builder.append(" ");
+      }
+    }
+    _builder.append("{");
     _builder.newLineIfNotEmpty();
     {
       EList<Field> _fields = entity.getFields();
@@ -64,8 +76,8 @@ public class EntitiesGenerator extends AbstractGenerator {
         CharSequence _compile = this.compile(field.getType());
         _builder.append(_compile, "\t");
         _builder.append(" ");
-        String _name_1 = field.getName();
-        _builder.append(_name_1, "\t");
+        String _name_2 = field.getName();
+        _builder.append(_name_2, "\t");
         _builder.append(";");
         _builder.newLineIfNotEmpty();
       }
@@ -87,8 +99,8 @@ public class EntitiesGenerator extends AbstractGenerator {
         _builder.append("\t");
         _builder.append("\t");
         _builder.append("return ");
-        String _name_2 = field_1.getName();
-        _builder.append(_name_2, "\t\t");
+        String _name_3 = field_1.getName();
+        _builder.append(_name_3, "\t\t");
         _builder.append(";");
         _builder.newLineIfNotEmpty();
         _builder.append("\t");
@@ -108,8 +120,8 @@ public class EntitiesGenerator extends AbstractGenerator {
         _builder.append("\t");
         _builder.append("\t");
         _builder.append("this.");
-        String _name_3 = field_1.getName();
-        _builder.append(_name_3, "\t\t");
+        String _name_4 = field_1.getName();
+        _builder.append(_name_4, "\t\t");
         _builder.append(" = value;");
         _builder.newLineIfNotEmpty();
         _builder.append("\t");
@@ -121,8 +133,8 @@ public class EntitiesGenerator extends AbstractGenerator {
     _builder.newLine();
     _builder.append("\t");
     _builder.append("public ");
-    String _name_4 = entity.getName();
-    _builder.append(_name_4, "\t");
+    String _name_5 = entity.getName();
+    _builder.append(_name_5, "\t");
     _builder.append("() {");
     _builder.newLineIfNotEmpty();
     _builder.append("\t\t");

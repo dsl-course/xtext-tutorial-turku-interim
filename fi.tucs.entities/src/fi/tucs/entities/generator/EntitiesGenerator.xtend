@@ -41,11 +41,11 @@ class EntitiesGenerator extends AbstractGenerator {
 	
 	
 	
-	def CharSequence compile(Entity entity) { 
+	def CharSequence compile(Entity entity)  
 		'''
 		package entities;
 		
-		public class «entity.name» {
+		public class «entity.name» «IF entity.superType != null»extends «entity.superType.name» «ENDIF»{
 			«FOR field : entity.fields»
 			private «field.type.compile» «field.name»;
 			«ENDFOR»
@@ -72,41 +72,26 @@ class EntitiesGenerator extends AbstractGenerator {
 			
 		}
 		'''
-	}
 	
-	
-
 	def CharSequence compile(FieldType x) {
 		x.typeToString
 	}
 	
-	
-	
-	
-		
 	def dispatch CharSequence compile(PrintStatement x) { 
 		'''System.out.println(«x.expr.compile»);'''
 	}
-	
-	
-	
-	
 	
 	def dispatch CharSequence compile(AssignmentStatement x) {
 		'''this.set«x.assignee.name.toFirstUpper»(«x.expr.compile»);'''
 	}
 		
-	
-	
 	def dispatch CharSequence compile(IntConstant x) {
 		x.value.toString
 	}
 	
-	
 	def dispatch CharSequence compile(StringConstant x) { 
 		'"' + x.value + '"'
 	}
-	
 	
 	def dispatch CharSequence compile(BoolConstant x) {
 		switch x.value {
@@ -115,18 +100,14 @@ class EntitiesGenerator extends AbstractGenerator {
 		}
 	}
 	
-	
 	def dispatch CharSequence compile(FieldRef x) { 
 		'''this.get«x.field.name.toFirstUpper»()'''
 	}
 	
 	
-	
 	def dispatch compile(FieldType fieldType) {
 		fieldType.typeToString
 	}
-	
-	
 	
 	def dispatch typeToString(BasicType type) {
 		switch (type.typeName) {
@@ -140,7 +121,5 @@ class EntitiesGenerator extends AbstractGenerator {
 		type.entity.name
 	}
 	
-	
-		
 	
 }

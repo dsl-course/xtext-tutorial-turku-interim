@@ -3,6 +3,17 @@
  */
 package fi.tucs.entities.scoping
 
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.EReference
+import org.eclipse.xtext.scoping.IScope
+import fi.tucs.entities.entities.impl.FieldRefImpl
+import fi.tucs.entities.entities.impl.AssignmentStatementImpl
+
+import static extension org.eclipse.xtext.EcoreUtil2.*
+import fi.tucs.entities.entities.Entity
+import org.eclipse.xtext.scoping.Scopes
+import fi.tucs.entities.EntitiesModelUtils
+import com.google.inject.Inject
 
 /**
  * This class contains custom scoping description.
@@ -11,5 +22,20 @@ package fi.tucs.entities.scoping
  * on how and when to use it.
  */
 class EntitiesScopeProvider extends AbstractEntitiesScopeProvider {
+	
+	@Inject extension EntitiesModelUtils f
+
+	override getScope(EObject context, EReference reference) {
+		switch (context) {
+			FieldRefImpl, AssignmentStatementImpl: scopeForObject(context)
+			default: super.getScope(context, reference)
+		}
+	}
+	
+	def protected IScope scopeForObject(EObject obj) {
+		// import static extension org.eclipse.xtext.EcoreUtil2.*
+		val container = obj.getContainerOfType(Entity)
+		Scopes.scopeFor(container.fields + container.classHierarchyMembers)
+	}
 
 }

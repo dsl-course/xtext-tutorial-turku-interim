@@ -29,8 +29,19 @@ import org.eclipse.xtext.xbase.lib.StringExtensions;
  */
 @SuppressWarnings("all")
 public class EntitiesQuickfixProvider extends DefaultQuickfixProvider {
+  @Fix(EntitiesValidator.INVALID_ENTITY_NAME)
+  public void capitalizeEntityName(final Issue issue, final IssueResolutionAcceptor acceptor) {
+    final ISemanticModification _function = (EObject element, IModificationContext context) -> {
+      ((Entity) element).setName(StringExtensions.toFirstUpper(((Entity) element).getName()));
+    };
+    acceptor.accept(issue, 
+      "Capitalize first letter", 
+      "Capitalize first letter of ...", 
+      "", _function);
+  }
+  
   @Fix(EntitiesValidator.HIERARCHY_CYCLE)
-  public void eqwueioquweioqwueioqweuqwo(final Issue issue, final IssueResolutionAcceptor acceptor) {
+  public void removeSuperType(final Issue issue, final IssueResolutionAcceptor acceptor) {
     final ISemanticModification _function = (EObject element, IModificationContext context) -> {
       ((Entity) element).setSuperType(null);
     };
@@ -41,7 +52,7 @@ public class EntitiesQuickfixProvider extends DefaultQuickfixProvider {
   }
   
   @Fix(Diagnostic.LINKING_DIAGNOSTIC)
-  public void dajskdajsdklsa(final Issue issue, final IssueResolutionAcceptor acceptor) {
+  public void createMissingEntity(final Issue issue, final IssueResolutionAcceptor acceptor) {
     final ISemanticModification _function = (EObject element, IModificationContext context) -> {
       final Entity currentEntity = EcoreUtil2.<Entity>getContainerOfType(element, Entity.class);
       EObject _eContainer = currentEntity.eContainer();
@@ -65,18 +76,6 @@ public class EntitiesQuickfixProvider extends DefaultQuickfixProvider {
     acceptor.accept(issue, 
       "Create missing entity after current entity", 
       "Create missing entity after current entity", 
-      "", _function);
-  }
-  
-  @Fix(EntitiesValidator.INVALID_ENTITY_NAME)
-  public void capitalizeEntityName(final Issue issue, final IssueResolutionAcceptor acceptor) {
-    final ISemanticModification _function = (EObject element, IModificationContext context) -> {
-      ((Entity) element).setName(
-        StringExtensions.toFirstUpper(((Entity) element).getName()));
-    };
-    acceptor.accept(issue, 
-      "Capitalize first letter", 
-      "Capitalize first letter of ...", 
       "", _function);
   }
 }

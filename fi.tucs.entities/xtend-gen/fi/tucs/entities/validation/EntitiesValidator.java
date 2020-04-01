@@ -33,7 +33,18 @@ public class EntitiesValidator extends AbstractEntitiesValidator {
   public final static String INVALID_BOOLEAN_FIELD_NAME = (EntitiesValidator.ISSUE_CODE_PREFIX + "InvalidBooleanFieldName");
   
   @Check
-  public void fjsdkfjsdfklsd(final Entity entity) {
+  public void checkEntityNameStartsWithCapital(final Entity entity) {
+    boolean _isLowerCase = Character.isLowerCase(entity.getName().charAt(0));
+    if (_isLowerCase) {
+      this.warning("Entity name should start with a capital", 
+        EntitiesPackage.eINSTANCE.getEntity_Name(), 
+        EntitiesValidator.INVALID_ENTITY_NAME, 
+        entity.getName());
+    }
+  }
+  
+  @Check
+  public void methodNameDoesntMatter(final Entity entity) {
     Entity _superType = entity.getSuperType();
     boolean _tripleEquals = (_superType == null);
     if (_tripleEquals) {
@@ -60,25 +71,14 @@ public class EntitiesValidator extends AbstractEntitiesValidator {
     }
   }
   
-  @Check
-  public void checkEntityNameStartsWithCapital(final Entity entity) {
-    boolean _isLowerCase = Character.isLowerCase(entity.getName().charAt(0));
-    if (_isLowerCase) {
-      this.warning("Entity name should start with a capital", 
-        EntitiesPackage.eINSTANCE.getEntity_Name(), 
-        EntitiesValidator.INVALID_ENTITY_NAME, 
-        entity.getName());
-    }
-  }
-  
   @Inject
   @Extension
-  private ExpressionTypeComputer fasfsjflksjflks;
+  private ExpressionTypeComputer nameDoesntMatter;
   
   @Check
-  public void fjsdklfsdfkljs(final AssignmentStatement x) {
-    final Expression_Type left = this.fasfsjflksjflks.typeFor(x.getAssignee());
-    final Expression_Type right = this.fasfsjflksjflks.typeFor(x.getExpr());
+  public void checkAssignmentHasCorrectTypes(final AssignmentStatement x) {
+    final Expression_Type left = this.nameDoesntMatter.typeFor(x.getAssignee());
+    final Expression_Type right = this.nameDoesntMatter.typeFor(x.getExpr());
     if ((((right != null) && (left != null)) && (!right.equals(left)))) {
       this.error(((("Type mismatch: " + left) + " and ") + right), 
         EntitiesPackage.eINSTANCE.getAssignmentStatement_Assignee());

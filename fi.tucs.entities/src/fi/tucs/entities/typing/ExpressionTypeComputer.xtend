@@ -34,7 +34,7 @@ class ExpressionTypeComputer {
 			}
 		}
 		if (f.type instanceof EntityType) {
-			// ???
+			new Entity_Type((f.type as EntityType).entity.name)
 		}
 	}
 	

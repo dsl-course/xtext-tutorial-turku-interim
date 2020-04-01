@@ -3,7 +3,21 @@
  */
 package fi.tucs.entities.scoping;
 
+import com.google.common.collect.Iterables;
+import com.google.inject.Inject;
+import fi.tucs.entities.EntitiesModelUtils;
+import fi.tucs.entities.entities.Entity;
+import fi.tucs.entities.entities.Field;
+import fi.tucs.entities.entities.impl.AssignmentStatementImpl;
+import fi.tucs.entities.entities.impl.FieldRefImpl;
 import fi.tucs.entities.scoping.AbstractEntitiesScopeProvider;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.xtext.EcoreUtil2;
+import org.eclipse.xtext.scoping.IScope;
+import org.eclipse.xtext.scoping.Scopes;
+import org.eclipse.xtext.xbase.lib.Extension;
 
 /**
  * This class contains custom scoping description.
@@ -13,4 +27,40 @@ import fi.tucs.entities.scoping.AbstractEntitiesScopeProvider;
  */
 @SuppressWarnings("all")
 public class EntitiesScopeProvider extends AbstractEntitiesScopeProvider {
+  @Inject
+  @Extension
+  private EntitiesModelUtils f;
+  
+  @Override
+  public IScope getScope(final EObject context, final EReference reference) {
+    IScope _switchResult = null;
+    boolean _matched = false;
+    if (context instanceof FieldRefImpl) {
+      _matched=true;
+    }
+    if (!_matched) {
+      if (context instanceof AssignmentStatementImpl) {
+        _matched=true;
+      }
+    }
+    if (_matched) {
+      _switchResult = this.scopeForObject(context);
+    }
+    if (!_matched) {
+      _switchResult = super.getScope(context, reference);
+    }
+    return _switchResult;
+  }
+  
+  protected IScope scopeForObject(final EObject obj) {
+    IScope _xblockexpression = null;
+    {
+      final Entity container = EcoreUtil2.<Entity>getContainerOfType(obj, Entity.class);
+      EList<Field> _fields = container.getFields();
+      Iterable<Field> _classHierarchyMembers = this.f.classHierarchyMembers(container);
+      Iterable<Field> _plus = Iterables.<Field>concat(_fields, _classHierarchyMembers);
+      _xblockexpression = Scopes.scopeFor(_plus);
+    }
+    return _xblockexpression;
+  }
 }

@@ -4,11 +4,7 @@
 package fi.tucs.entities.ui.quickfix
 
 import org.eclipse.xtext.ui.editor.quickfix.DefaultQuickfixProvider
-//import org.eclipse.xtext.validation.Issue
-//import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor
-//import fi.tucs.entities.entities.Entity
 import org.eclipse.xtext.ui.editor.quickfix.Fix
-//import fi.tucs.entities.validation.EntitiesValidator
 import org.eclipse.xtext.ui.editor.model.edit.ISemanticModification
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.ui.editor.model.edit.IModificationContext
@@ -17,11 +13,11 @@ import org.eclipse.xtext.validation.Issue
 import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor
 import fi.tucs.entities.entities.Entity
 import org.eclipse.xtext.diagnostics.Diagnostic
+import fi.tucs.entities.entities.Model
+import fi.tucs.entities.entities.EntitiesFactory
 
 
 import static extension org.eclipse.xtext.EcoreUtil2.*
-import fi.tucs.entities.entities.Model
-import fi.tucs.entities.entities.EntitiesFactory
 
 /**
  * Custom quickfixes.
@@ -29,23 +25,30 @@ import fi.tucs.entities.entities.EntitiesFactory
  * See https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#quick-fixes
  */
 class EntitiesQuickfixProvider extends DefaultQuickfixProvider {
-
-//	@Fix(EntitiesValidator.INVALID_NAME)
-//	def capitalizeName(Issue issue, IssueResolutionAcceptor acceptor) {
-//		acceptor.accept(issue, 'Capitalize name', 'Capitalize the name.', 'upcase.png') [
-//			context |
-//			val xtextDocument = context.xtextDocument
-//			val firstLetter = xtextDocument.get(issue.offset, 1)
-//			xtextDocument.replace(issue.offset, 1, firstLetter.toUpperCase)
-//		]
-//	}
-
-
-
-
+	
+	@Fix(EntitiesValidator.INVALID_ENTITY_NAME)
+	def void capitalizeEntityName(
+		Issue issue,
+		IssueResolutionAcceptor acceptor) {
+	
+		acceptor.accept(
+			issue,
+			"Capitalize first letter",
+			"Capitalize first letter of ...",
+			"",
+			[
+				element,
+				context
+				|
+				(element as Entity).name = (element as Entity).name.toFirstUpper
+			]
+		)
+			
+	}
+	
 
 	@Fix(EntitiesValidator.HIERARCHY_CYCLE)
-	def void eqwueioquweioqwueioqweuqwo(Issue issue, IssueResolutionAcceptor acceptor) {
+	def void removeSuperType(Issue issue, IssueResolutionAcceptor acceptor) {
 		acceptor.accept(
 			
 			issue,
@@ -71,11 +74,8 @@ class EntitiesQuickfixProvider extends DefaultQuickfixProvider {
 	}
 	
 	
-	
-	
-	
 	@Fix(Diagnostic.LINKING_DIAGNOSTIC)
-	def void dajskdajsdklsa(Issue issue, IssueResolutionAcceptor acceptor) {
+	def void createMissingEntity(Issue issue, IssueResolutionAcceptor acceptor) {
 		acceptor.accept(
 			issue,
 			"Create missing entity after current entity",
@@ -86,8 +86,7 @@ class EntitiesQuickfixProvider extends DefaultQuickfixProvider {
 				element,
 				context
 				|
-				// import static extension org.eclipse.xtext.EcoreUtil2.*
-				val currentEntity = element.getContainerOfType(Entity)
+				val currentEntity = element.getContainerOfType(Entity) // import static extension org.eclipse.xtext.EcoreUtil2.*
 				val model = currentEntity.eContainer as Model
 				model.entities.add(
 					model.entities.indexOf(currentEntity) + 1,
@@ -104,39 +103,6 @@ class EntitiesQuickfixProvider extends DefaultQuickfixProvider {
 		)
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-	@Fix(EntitiesValidator.INVALID_ENTITY_NAME)
-	def void capitalizeEntityName(
-		Issue issue,
-		IssueResolutionAcceptor acceptor) {
-	
-		acceptor.accept(
-			issue,
-			"Capitalize first letter",
-			"Capitalize first letter of ...",
-			"",
-			[
-				element,
-				context
-				|
-				(element as Entity).name = 
-				(element as Entity).name.toFirstUpper
-			]
-		)
-			
-	}
 
 
 	
